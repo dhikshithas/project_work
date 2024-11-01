@@ -25,16 +25,28 @@ export const Moderation = () => {
   }
 
   let columns = Object.keys(data.data[0])
+    .filter((key) => key !== "_id") // Eliminate the _id key
     .map((key) => {
       return {
         id: key,
         label: key.charAt(0).toUpperCase() + key.slice(1),
         minWidth: "fit-content",
       };
-    })
-    .filter(Boolean);
+    });
 
-  let rows = data.data;
+  columns.unshift({
+    id: "S.No",
+    label: "S.No",
+    minWidth: "fit-content",
+  });
+
+  let rows = data.data.map((item, index) => {
+    const { _id, ...rest } = item;
+    return {
+      "S.No": index + 1,
+      ...rest,
+    };
+  });
 
   return (
     <div className="moderationDetails">
