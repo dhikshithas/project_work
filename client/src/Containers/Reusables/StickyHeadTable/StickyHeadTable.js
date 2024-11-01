@@ -23,8 +23,8 @@ export default function StickyHeadTable({ columns, rows, minHeight }) {
     setPage(0);
   };
 
-  const handleStatusClick = (status) => {
-    navigate("/admin/moderationMark");
+  const handleStatusClick = (row) => {
+    navigate("/admin/moderationMark", { state: { batch: row.batch } });
   };
 
   return (
@@ -59,7 +59,7 @@ export default function StickyHeadTable({ columns, rows, minHeight }) {
                           onClick={
                             column.id === "status" &&
                             row[column.id] === "Not completed"
-                              ? () => handleStatusClick(value)
+                              ? () => handleStatusClick(row)
                               : undefined
                           }
                           style={

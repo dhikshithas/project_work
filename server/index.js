@@ -37,6 +37,22 @@ app.get("/get-moderation", async (req, res) => {
   }
 });
 
+app.get("/get-moderation-mark", async (req, res) => {
+  try {
+    const batch = req.query.batch;
+    const database = client.db("project_work_dashboard");
+    const collection = database.collection("student_mark_table");
+    let data = await collection.find({}).toArray();
+    data = data.filter(
+      (item) => item.moderation === true && item.batch === batch
+    );
+    return res.status(200).send(data);
+  } catch (error) {
+    console.error("Error retrieving data", error);
+    res.status(500).send("Error retrieving data");
+  }
+});
+
 app.post("/login", async (req, res) => {
   const database = client.db("project_work_dashboard"); // Replace with your database name
   const collection = database.collection("user_table"); // Replace with your collection name

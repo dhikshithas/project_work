@@ -1,40 +1,87 @@
 import "./ModerationMark.css";
 import { MaterialTable } from "../../Reusables/MaterialTable/MaterialTable.js";
 import Button from "@mui/material/Button";
+import { useLocation } from "react-router-dom";
+import { useGetModerationMark } from "../../../Query/Hooks/useGetModerationMark.js";
+import CircularProgress from "@mui/material/CircularProgress";
+
+// const rows = [
+//   {
+//     Name: "ash",
+//   },
+// ];
+
+// const columns = [
+//   {
+//     accessorkey: "Name",
+//     header: "Name",
+//     size: "fit-content",
+//     enableEditing: false,
+//   },
+// ];
 
 const columns = [
-  { accessorKey: "id", header: "S.no", size: 170, enableEditing: false },
   { accessorKey: "Name", header: "Name", size: 170, enableEditing: false },
-  {
-    accessorKey: "Roll number",
-    header: "Roll number",
-    size: 170,
-    enableEditing: false,
-  },
-  {
-    accessorKey: "Moderation mark",
-    header: "Moderation mark",
-    size: 170,
-    enableEditing: true,
-  },
 ];
 
 const rows = [
   {
-    id: 1,
     Name: "Baskar T",
-    "Roll number": "7376201CS114",
-    "Moderation mark": null,
-  },
-  {
-    id: 2,
-    Name: "Pavithra lakshmi R",
-    "Roll number": "7376221EC224",
-    "Moderation mark": null,
   },
 ];
 
 export const ModerationMark = () => {
+  const location = useLocation();
+  const { batch } = location.state || {};
+  console.log(batch);
+  const { data, isLoading, isError, error } = useGetModerationMark({ batch });
+
+  if (isLoading) {
+    return (
+      <div className="loader">
+        <CircularProgress />
+      </div>
+    );
+  }
+
+  if (isError) {
+    console.error(error);
+    return <div>Error loading moderation data.</div>; // Display an error message
+  }
+
+  if (!data || !data.data || data.data.length === 0) {
+    return <div>No moderation data available.</div>;
+  }
+  console.log("data", data.data);
+
+  let columns = Object.keys(data.data[0])
+    .filter((key) => key === "std_name" || key === "batch") // Eliminate the _id key
+    .map((key) => {
+      return {
+        accessorKey: key,
+        header: key,
+        size: 170,
+        enableEditing: false,
+      };
+    });
+
+  columns.unshift({
+    accessorKey: "id",
+    header: "id",
+    size: 170,
+    enableEditing: false,
+  });
+
+  console.log("header", columns);
+
+  let rows = data.data.map((item, index) => {
+    const { _id, ...rest } = item;
+    return {
+      id: index + 1,
+      ...rest,
+    };
+  });
+
   return (
     <div className="moderationForm">
       <MaterialTable columns={columns} rows={rows} />
