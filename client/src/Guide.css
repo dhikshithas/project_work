@@ -1,0 +1,60 @@
+.guidemain {
+  width: 100%;
+  height: 100%;
+  background: #f6f6f6;
+  display: flex;
+  flex-direction: column;
+}
+.guideHeader {
+  width: 100%;
+  height: 15%;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dashboard {
+  margin-left: 60px;
+}
+.logout {
+  margin-right: 60px;
+}
+.guideMainContent {
+  width: 88%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 45px;
+  margin-left: 80px;
+}
+.guideInfo {
+  width: 100%;
+  height: 22%;
+  background: #f6f6f6;
+  display: flex;
+  justify-content: space-between;
+}
+.guideName {
+  display: flex;
+  font-size: large;
+  width: 47%;
+  height: 100%;
+  background: #fff;
+  align-items: center;
+  justify-content: center;
+}
+.guideID {
+  display: flex;
+  font-size: large;
+  width: 47%;
+  height: 100%;
+  background: #fff;
+  align-items: center;
+  justify-content: center;
+}
+.studentMark {
+  width: 100%;
+  height: 70%;
+  background: #fff;
+}

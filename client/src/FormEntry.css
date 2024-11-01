@@ -1,0 +1,33 @@
+.LoggerForm {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: 55px;
+  margin-left: 100px;
+  gap: 10px;
+}
+.mainform {
+  display: flex;
+  flex-direction: column;
+  gap: 45px;
+  padding: 22px;
+  border-radius: 15px;
+  background-color: white;
+}
+.LoggerFormRow {
+  display: flex;
+  justify-content: space-between;
+}
+.submitButton {
+  align-self: self-end;
+}
+.label {
+  width: 20%;
+}
+.inputbox {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2%;
+}
