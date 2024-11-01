@@ -1,0 +1,40 @@
+.layoutContainer {
+  height: 100%;
+  width: 100%;
+  background: #f1f5f9;
+}
+
+.header {
+  height: 60px;
+  display: flex;
+  font-size: 20px;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding-left: 30px;
+  padding-right: 55px;
+}
+
+.content {
+  height: calc(100% - 60px);
+  display: flex;
+}
+
+.sidebar {
+  width: 244px;
+  flex-direction: column;
+  background: #fff;
+  display: flex;
+  gap: 20px;
+}
+
+.navButton {
+  padding: 30px;
+  text-decoration: none;
+  color: black;
+  font-size: medium;
+}
+
+.main {
+  width: calc(100% - 244px);
+}

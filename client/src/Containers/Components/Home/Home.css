@@ -1,0 +1,22 @@
+.homeContent{
+    display:flex;
+    gap: 25px;
+    padding: 27px;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.sem7{
+    width: 315px;
+    height: 245px;
+    border-radius: 20px;
+    background: #FFF;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.semName{
+    padding: 13px;
+    font-size: large;
+}
