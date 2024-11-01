@@ -57,7 +57,7 @@ export default function StickyHeadTable({ columns, rows, minHeight }) {
                           key={column.id}
                           align={column.align}
                           onClick={
-                            column.id === "Status" &&
+                            column.id === "status" &&
                             row[column.id] === "Not completed"
                               ? () => handleStatusClick(value)
                               : undefined

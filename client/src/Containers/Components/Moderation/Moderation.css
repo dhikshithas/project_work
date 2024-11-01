@@ -1,7 +1,14 @@
-.moderationDetails{
-    padding: 0% 5%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.moderationDetails {
+  padding: 0% 5%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }

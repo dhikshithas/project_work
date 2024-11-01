@@ -30,21 +30,43 @@ export const FormEntry = () => {
     });
   };
 
+  function findMaxMinDiff(a, b, c) {
+    const max = Math.max(a, b, c);
+    const min = Math.min(a, b, c);
+    const difference = max - min;
+
+    return difference;
+  }
+
   const mergeObjects = (obj1, obj2, obj3) => {
     return obj1.map((item1) => {
       const matchingItem = obj2.find(
         (item2) =>
           item2.roll_no === item1.roll_no && item2.std_name === item1.std_name
       );
-      return matchingItem ? { ...item1, ...matchingItem, ...obj3 } : item1;
+
+      if (matchingItem) {
+        const difference = findMaxMinDiff(
+          parseFloat(matchingItem.PMC1_mark),
+          parseFloat(matchingItem.PMC2_mark),
+          parseFloat(matchingItem.PMC3_mark)
+        );
+
+        const total_pmc = obj3.pmc_total_mark * 0.1;
+        const moderation = difference > total_pmc;
+
+        return { ...item1, ...matchingItem, ...obj3, moderation };
+      }
+
+      return item1;
     });
   };
 
   const onSubmit = async (data) => {
     let otherDetails = {
-      semester: parseInt(data.semester),
-      guide_total_mark: parseInt(data.guidemark),
-      pmc_total_mark: parseInt(data.pmcmark),
+      semester: parseFloat(data.semester),
+      guide_total_mark: parseFloat(data.guidemark),
+      pmc_total_mark: parseFloat(data.pmcmark),
       batch: data.batch,
     };
     let detailsObject = {};
