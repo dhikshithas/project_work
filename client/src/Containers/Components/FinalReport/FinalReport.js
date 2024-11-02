@@ -1,7 +1,7 @@
 import React from "react";
 import "./FinalReport.css";
 import StickyHeadTable from "../../Reusables/StickyHeadTable/StickyHeadTable";
-
+import { useGetBatchMark } from "../../../Query/Hooks/useGetBatchDetails";
 const columns = [
   { id: "S.No", label: "S.No", minWidth: 170 },
   { id: "Semester", label: "Semester", minWidth: 170 },

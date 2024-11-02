@@ -25,12 +25,34 @@ export const AppRouter = () => {
           <Route path="/guide" element={<Guide />}></Route>
           <Route path="/admin" element={<Layout />}>
             <Route index element={<Home />} />
-            <Route path="/admin/activityLogger" element={<ActivityLogger />} />
-            <Route path="/admin/moderation" element={<Moderation />} />
-            <Route path="/admin/viewDetails" element={<ViewDetails />} />
-            <Route path="/admin/finalReport" element={<FinalReport />} />
-            <Route path="/admin/formEntry" element={<FormEntry />} />
-            <Route path="/admin/moderationMark" element={<ModerationMark />} />
+            <Route
+              path="/admin/activityLogger"
+              element={<ActivityLogger />}
+              key="activityLogger"
+            />
+            <Route
+              path="/admin/moderation"
+              element={<Moderation />}
+              key="moderation"
+            />
+            <Route
+              path="/admin/viewDetails"
+              element={<ViewDetails key="viewDetails" />}
+            />
+            <Route
+              path="/admin/finalReport"
+              element={<FinalReport key="finalReport" />}
+            />
+            <Route
+              path="/admin/formEntry"
+              element={<FormEntry />}
+              key="formEntry"
+            />
+            <Route
+              path="/admin/moderationMark"
+              element={<ModerationMark />}
+              key="moderationMark"
+            />
           </Route>
         </Routes>
       </BrowserRouter>

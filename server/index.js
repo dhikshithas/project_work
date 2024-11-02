@@ -119,16 +119,17 @@ app.post("/averageEntry", async (req, res) => {
   batchName = data[0].batch;
   try {
     for (const item of data) {
-      const { roll_no, average, guide_total_mark } = item;
+      const { roll_no, average, guide_total_mark, semester } = item;
       const existingDoc = await studentMarkCollection.findOne({
         roll_no: roll_no,
+        semester: semester,
       });
       if (!existingDoc) {
         console.log(`No document found with _id: ${_id}`);
       } else {
         await studentMarkCollection
           .updateOne(
-            { roll_no: roll_no },
+            { roll_no: roll_no, semester: semester },
             { $set: { average: average, total: average + guide_total_mark } }
           )
           .then(() => console.log("done"))
@@ -147,7 +148,7 @@ app.post("/averageEntry", async (req, res) => {
   }
 });
 
-app.get("/get-student-marks", async (re, res) => {
+app.get("/get-student-marks", async (req, res) => {
   const database = client.db("project_work_dashboard");
   try {
     const studentMarkCollection = database.collection("student_mark_table");
@@ -155,6 +156,20 @@ app.get("/get-student-marks", async (re, res) => {
     return res.status(201).send(data);
   } catch {
     return res.status(500).send("Error retrieving data");
+  }
+});
+
+app.get("/get-batch-marks", async (req, res) => {
+  try {
+    const batch = req.query.batch;
+    const database = client.db("project_work_dashboard");
+    const collection = database.collection("student_mark_table");
+    let data = await collection.find({}).toArray();
+    data = data.filter((item) => item.batch === batch);
+    return res.status(200).send(data);
+  } catch (error) {
+    console.error("Error retrieving data", error);
+    res.status(500).send("Error retrieving data");
   }
 });
 

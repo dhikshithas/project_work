@@ -28,7 +28,7 @@ export default function StickyHeadTable({ columns, rows, minHeight }) {
   };
 
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+    <Paper sx={{ width: "100%", overflow: "hidden", maxHeight: "530px" }}>
       <TableContainer sx={{ minHeight: minHeight, maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>

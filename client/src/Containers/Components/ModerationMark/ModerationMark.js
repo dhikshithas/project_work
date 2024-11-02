@@ -84,6 +84,7 @@ export const ModerationMark = () => {
       guide_total_mark: rows[index].guide_total_mark,
       batch: rows[index].batch,
       average: row.average,
+      semester: rows[index].semester,
     }));
     await averageEntryMutation
       .mutateAsync(submittedData)
@@ -136,6 +137,7 @@ export const ModerationMark = () => {
       </Snackbar>
       <form className="moderationForm" onSubmit={handleSubmit(onSubmit)}>
         <MaterialTable
+          key={columns}
           columns={columns}
           rows={rows.map((row, index) => ({
             ...row,
