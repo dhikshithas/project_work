@@ -17,7 +17,7 @@ export const Moderation = () => {
 
   if (isError) {
     console.error(error);
-    return <div>Error loading moderation data.</div>; // Display an error message
+    return <div>Error loading moderation data.</div>;
   }
 
   if (!data || !data.data || data.data.length === 0) {

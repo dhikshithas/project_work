@@ -26,7 +26,7 @@ export const FormEntry = () => {
     return rows.map((row) => {
       const obj = {};
       headers.forEach((header, index) => {
-        obj[header] = row[index]; // Assign header as key and row item as value
+        obj[header] = row[index];
       });
       return obj;
     });
