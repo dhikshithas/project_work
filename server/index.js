@@ -161,17 +161,18 @@ app.get("/get-student-marks", async (req, res) => {
 });
 
 app.get("/get-batch-marks", async (req, res) => {
-  console.log("hi");
   try {
-    const workbook = new Workbook();
-    const worksheet = workbook.addWorksheet("Marks");
-
     const batch = req.query.batch;
-    console.log(typeof batch);
+    const semester = req.query.semester;
+    const workbook = new Workbook();
+    const worksheetName = `${batch}-${semester}`;
+    const worksheet = workbook.addWorksheet(worksheetName);
     const database = client.db("project_work_dashboard");
     const collection = database.collection("student_mark_table");
     let data = await collection.find({}).toArray();
-    data = data.filter((item) => item.batch === batch);
+    data = data.filter((item) => {
+      return item.semester === parseInt(semester) && item.batch === batch;
+    });
     const keys = Object.keys(data[0]).filter((key) => key !== "_id");
     worksheet.columns = keys.map((key) => ({
       header: key.charAt(0).toUpperCase() + key.slice(1),
@@ -188,6 +189,117 @@ app.get("/get-batch-marks", async (req, res) => {
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     );
     res.setHeader("Content-Disposition", "attachment; filename=marks.xlsx");
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (error) {
+    console.error("Error retrieving data", error);
+    res.status(500).send("Error retrieving data");
+  }
+});
+
+app.get("/get-marks-sheet", async (req, res) => {
+  try {
+    const batch = req.query.batch;
+    const semester = req.query.semester;
+    const workbook = new Workbook();
+    const worksheetName = `${batch}-${semester}-mark-sheet`;
+    const worksheet = workbook.addWorksheet(worksheetName);
+    const database = client.db("project_work_dashboard");
+    const collection = database.collection("student_mark_table");
+
+    let data = await collection.find({}).toArray();
+
+    data = data.filter((item) => {
+      return item.semester === parseInt(semester) && item.batch === batch;
+    });
+
+    const keysToInclude = [
+      "roll_no",
+      "std_name",
+      "guide_mark",
+      "PMC1_mark",
+      "PMC2_mark",
+      "PMC3_mark",
+    ];
+
+    worksheet.columns = keysToInclude.map((key) => ({
+      header: key.charAt(0).toUpperCase() + key.slice(1),
+      key: key,
+      width: 20,
+    }));
+
+    data.forEach((item) => {
+      const filteredItem = keysToInclude.reduce((obj, key) => {
+        obj[key] = item[key];
+        return obj;
+      }, {});
+      worksheet.addRow(filteredItem);
+    });
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=${worksheetName}.xlsx`
+    );
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (error) {
+    console.error("Error retrieving data", error);
+    res.status(500).send("Error retrieving data");
+  }
+});
+
+app.get("/get-project-details", async (req, res) => {
+  try {
+    const batch = req.query.batch;
+    const semester = req.query.semester;
+    const workbook = new Workbook();
+    const worksheetName = `${batch}-${semester}-project-details`;
+    const worksheet = workbook.addWorksheet(worksheetName);
+    const database = client.db("project_work_dashboard");
+    const collection = database.collection("student_mark_table");
+
+    let data = await collection.find({}).toArray();
+
+    data = data.filter((item) => {
+      return item.semester === parseInt(semester) && item.batch === batch;
+    });
+
+    const keysToInclude = [
+      "roll_no",
+      "std_name",
+      "guide_id",
+      "dept_name",
+      "project_name",
+    ];
+
+    worksheet.columns = keysToInclude.map((key) => ({
+      header: key.charAt(0).toUpperCase() + key.slice(1),
+      key: key,
+      width: 20,
+    }));
+
+    data.forEach((item) => {
+      const filteredItem = keysToInclude.reduce((obj, key) => {
+        obj[key] = item[key];
+        return obj;
+      }, {});
+      worksheet.addRow(filteredItem);
+    });
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=${worksheetName}.xlsx`
+    );
 
     await workbook.xlsx.write(res);
     res.end();

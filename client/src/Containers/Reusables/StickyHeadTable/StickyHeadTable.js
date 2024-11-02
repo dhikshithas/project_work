@@ -27,8 +27,16 @@ export default function StickyHeadTable({ columns, rows, minHeight }) {
     navigate("/admin/moderationMark", { state: { batch: row.batch } });
   };
 
-  const downloadExcel = (batch) => {
-    window.location.href = `http://localhost:3001/get-batch-marks?batch=${batch}`;
+  const downloadExcel = (batch, semester) => {
+    window.location.href = `http://localhost:3001/get-batch-marks?batch=${batch}&semester=${semester}`;
+  };
+
+  const downloadMarksheet = (batch, semester) => {
+    window.location.href = `http://localhost:3001/get-marks-sheet?batch=${batch}&semester=${semester}`;
+  };
+
+  const downloadProjectDetail = (batch, semester) => {
+    window.location.href = `http://localhost:3001/get-project-details?batch=${batch}&semester=${semester}`;
   };
 
   return (
@@ -64,8 +72,13 @@ export default function StickyHeadTable({ columns, rows, minHeight }) {
                             column.id === "status" &&
                             row[column.id] === "Not completed"
                               ? () => handleStatusClick(row)
-                              : column.id == "finalReport"
-                              ? () => downloadExcel(row.batch)
+                              : column.id === "finalReport"
+                              ? () => downloadExcel(row.batch, row.semester)
+                              : column.id === "uploaded_mark"
+                              ? () => downloadMarksheet(row.batch, row.semester)
+                              : column.id === "uploaded_project_detail"
+                              ? () =>
+                                  downloadProjectDetail(row.batch, row.semester)
                               : undefined
                           }
                           style={{
@@ -73,13 +86,17 @@ export default function StickyHeadTable({ columns, rows, minHeight }) {
                               column.id === "status" &&
                               value === "Not completed"
                                 ? "red"
-                                : column.id === "finalReport"
+                                : column.id === "finalReport" ||
+                                  column.id === "uploaded_mark" ||
+                                  column.id === "uploaded_project_detail"
                                 ? "blue"
                                 : "inherit",
                             cursor:
                               (column.id === "status" &&
                                 value === "Not completed") ||
-                              column.id === "finalReport"
+                              column.id === "finalReport" ||
+                              column.id === "uploaded_mark" ||
+                              column.id === "uploaded_project_detail"
                                 ? "pointer"
                                 : "",
                           }}
