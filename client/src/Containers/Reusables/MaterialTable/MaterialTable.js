@@ -10,7 +10,7 @@ export const MaterialTable = ({ columns, rows }) => {
   const memoizedRows = useMemo(() => rows, [rows]);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 5, //customize the default page size
+    pageSize: 5,
   });
   const table = useMaterialReactTable({
     columns: memoizedColumns,
