@@ -25,14 +25,23 @@ export const Moderation = () => {
   }
 
   let columns = Object.keys(data.data[0])
-    .filter((key) => key !== "_id") // Eliminate the _id key
+    .filter((key) => key !== "_id")
     .map((key) => {
-      return {
-        id: key,
-        label: key.charAt(0).toUpperCase() + key.slice(1),
-        minWidth: "fit-content",
-      };
-    });
+      if (
+        key === "semester" ||
+        key === "batch" ||
+        key === "no_of_moderation" ||
+        key === "status"
+      ) {
+        return {
+          id: key,
+          label: key.charAt(0).toUpperCase() + key.slice(1),
+          minWidth: "fit-content",
+        };
+      }
+      return null;
+    })
+    .filter(Boolean);
 
   columns.unshift({
     id: "S.No",

@@ -78,13 +78,20 @@ app.post("/formEntry", async (req, res) => {
   const moderationCount = studentData.reduce((count, item) => {
     return count + (item.moderation ? 1 : 0);
   }, 0);
-
+  const now = new Date();
   const moderation = [
     {
       semester: studentData[0].semester,
       batch: studentData[0].batch,
+      guide_mark: studentData[0].guide_total_mark,
+      pmc_mark: studentData[0].pmc_total_mark,
+      date: `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`,
+      uploaded_mark: studentData[0].mark_detail,
+      uploaded_project_detail: studentData[0].project_detail,
+      excel_accepted: "Yes",
       no_of_moderation: moderationCount,
       status: moderationCount > 0 ? "Not completed" : "Completed",
+      final_report_generated: "No",
     },
   ];
   try {
@@ -137,6 +144,17 @@ app.post("/averageEntry", async (req, res) => {
     });
   } catch {
     return res.status(500).json({ message: "Data is invalid" });
+  }
+});
+
+app.get("/get-student-marks", async (re, res) => {
+  const database = client.db("project_work_dashboard");
+  try {
+    const studentMarkCollection = database.collection("student_mark_table");
+    let data = await studentMarkCollection.find({}).toArray();
+    return res.status(201).send(data);
+  } catch {
+    return res.status(500).send("Error retrieving data");
   }
 });
 
