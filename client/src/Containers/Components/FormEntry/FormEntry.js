@@ -6,6 +6,7 @@ import { useFormEntryDetails } from "../../../Query/Hooks/useFormEntry";
 import Snackbar from "@mui/material/Snackbar";
 import { useState } from "react";
 import Alert from "@mui/material/Alert";
+import { useNavigate } from "react-router-dom";
 
 export const FormEntry = () => {
   const {
@@ -16,6 +17,7 @@ export const FormEntry = () => {
   const formEntry = useFormEntryDetails();
   const [successSnackBar, setSuccessSnackBar] = useState(false);
   const [errorSnackBar, setErrorSnackBar] = useState(false);
+  const navigate = useNavigate();
 
   const transformData = (array) => {
     const headers = array[0];
@@ -66,7 +68,6 @@ export const FormEntry = () => {
             3;
           total = average + obj3.guide_total_mark;
         }
-
         return {
           ...item1,
           ...matchingItem,
@@ -87,6 +88,8 @@ export const FormEntry = () => {
       guide_total_mark: parseFloat(data.guidemark),
       pmc_total_mark: parseFloat(data.pmcmark),
       batch: data.batch,
+      mark_detail: data.marksexcel[0].name,
+      project_detail: data.detailsexcel[0].name,
     };
     let detailsObject = {};
     let marksObject = {};
@@ -117,6 +120,7 @@ export const FormEntry = () => {
       .mutateAsync(object)
       .then(() => {
         setSuccessSnackBar(true);
+        navigate("/admin/activityLogger");
       })
       .catch(() => setErrorSnackBar(true));
   };
