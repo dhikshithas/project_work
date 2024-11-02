@@ -328,6 +328,22 @@ app.get("/get-student-details", async (req, res) => {
   }
 });
 
+app.get("/get-guide-details", async (req, res) => {
+  try {
+    const id = req.query.id;
+    const database = client.db("project_work_dashboard");
+    const collection = database.collection("student_mark_table");
+    let data = await collection.find({}).toArray();
+    data = data.filter((item) => {
+      return item.guide_id === parseInt(id);
+    });
+    res.status(200).send(data);
+  } catch (error) {
+    console.error("Error retrieving data", error);
+    res.status(500).send("Error retrieving data");
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

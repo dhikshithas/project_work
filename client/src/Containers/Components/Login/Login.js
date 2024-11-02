@@ -37,7 +37,7 @@ export const Login = () => {
         } else if (data.role === "student") {
           navigate(`./student/${data.username}`);
         } else {
-          navigate("./guide");
+          navigate(`./guide/${data.username}`);
         }
       })
       .catch((error) => {

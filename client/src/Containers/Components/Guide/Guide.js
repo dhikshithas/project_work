@@ -1,64 +1,67 @@
 import "./Guide.css";
 import { MaterialTable } from "../../Reusables/MaterialTable/MaterialTable";
 import { Link } from "react-router-dom";
-
-const columns = [
-  { accessorKey: "id", header: "S.no", size: 170, enableEditing: false },
-  { accessorKey: "Name", header: "Name", size: 170, enableEditing: false },
-  {
-    accessorKey: "Roll number",
-    header: "Roll number",
-    size: 170,
-    enableEditing: false,
-  },
-  {
-    accessorKey: "Guide ID",
-    header: "Guide ID",
-    size: 170,
-    enableEditing: false,
-  },
-  {
-    accessorKey: "Semester",
-    header: "Semester",
-    size: 170,
-    enableEditing: false,
-  },
-  {
-    accessorKey: "Project name",
-    header: "Project name",
-    size: 170,
-    enableEditing: false,
-  },
-  {
-    accessorKey: "Marks obtained",
-    header: "Marks obtained",
-    size: 170,
-    enableEditing: false,
-  },
-];
-
-const rows = [
-  {
-    id: "1",
-    Name: "Baskar T",
-    "Roll number": "7376201CS114",
-    "Guide ID": "107",
-    Semester: "7",
-    "Project name": "Attendence tracking system using cloud computing",
-    "Marks obtained": "96",
-  },
-  {
-    id: "2",
-    Name: "Renu",
-    "Roll number": "7376221CS114",
-    "Guide ID": "107",
-    Semester: "7",
-    "Project name": "Smart E-Banking transactions",
-    "Marks obtained": "96",
-  },
-];
+import { useParams } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useGetGuideDetails } from "../../../Query/Hooks/useGetGuideDetails";
 
 export const Guide = () => {
+  const { id } = useParams();
+  const { data, isLoading, isError } = useGetGuideDetails(id);
+
+  if (isLoading) {
+    return (
+      <div className="loader">
+        <CircularProgress />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return <div>Error loading student data.</div>;
+  }
+
+  if (!data || !data.data || data.data.length === 0) {
+    return <div>No data available.</div>;
+  }
+
+  let columns = Object.keys(data.data[0])
+    .filter((key) => key !== "_id")
+    .map((key) => {
+      if (
+        key === "roll_no" ||
+        key === "std_name" ||
+        key === "guide_id" ||
+        key === "semester" ||
+        key === "project_name" ||
+        key === "total"
+      ) {
+        return {
+          accessorKey: key,
+          header: key,
+          size: "fit-content",
+          enableEditing: false,
+        };
+      }
+      return null;
+    })
+    .filter(Boolean);
+
+  columns.unshift({
+    accessorKey: "id",
+    header: "id",
+    size: "fit-content",
+    enableEditing: false,
+  });
+
+  let rows = data.data.map((item, index) => {
+    const { _id, ...rest } = item;
+    return {
+      id: index + 1,
+      ...rest,
+    };
+  });
+
   return (
     <div className="guideMain">
       <div className="guideHeader">
