@@ -75,7 +75,7 @@ export const Guide = () => {
       <div className="guideMainContent">
         <div className="guideInfo">
           <div className="guideName">PRAVIN SAVARIDASS</div>
-          <div className="guideID">101</div>
+          <div className="guideID">{id}</div>
         </div>
         <MaterialTable columns={columns} rows={rows} />
       </div>
