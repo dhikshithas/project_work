@@ -35,7 +35,7 @@ export const Login = () => {
         if (data.role === "admin") {
           navigate("./admin");
         } else if (data.role === "student") {
-          navigate("./student");
+          navigate(`./student/${data.username}`);
         } else {
           navigate("./guide");
         }

@@ -312,6 +312,22 @@ app.get("/get-project-details", async (req, res) => {
   }
 });
 
+app.get("/get-student-details", async (req, res) => {
+  try {
+    const roll_no = req.query.roll_no;
+    const database = client.db("project_work_dashboard");
+    const collection = database.collection("student_mark_table");
+    let data = await collection.find({}).toArray();
+    data = data.filter((item) => {
+      return item.roll_no === roll_no;
+    });
+    res.status(200).send(data);
+  } catch (error) {
+    console.error("Error retrieving data", error);
+    res.status(500).send("Error retrieving data");
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
