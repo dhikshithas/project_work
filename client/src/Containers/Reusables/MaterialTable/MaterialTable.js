@@ -5,7 +5,6 @@ import {
 } from "material-react-table";
 
 export const MaterialTable = ({ columns, rows }) => {
-  console.log("1", columns, rows);
   const memoizedColumns = useMemo(() => columns, [columns]);
   const memoizedRows = useMemo(() => rows, [rows]);
   const [pagination, setPagination] = useState({
@@ -26,7 +25,7 @@ export const MaterialTable = ({ columns, rows }) => {
         maxHeight: "530px",
       },
     },
-    onPaginationChange: setPagination, //hoist pagination state to your state when it changes internally
+    onPaginationChange: setPagination,
     state: { pagination },
   });
 
