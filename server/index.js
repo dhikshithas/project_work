@@ -1,6 +1,7 @@
 const express = require("express");
 const { MongoClient } = require("mongodb");
 const cors = require("cors");
+const { Workbook } = require("exceljs");
 
 const app = express();
 
@@ -160,13 +161,36 @@ app.get("/get-student-marks", async (req, res) => {
 });
 
 app.get("/get-batch-marks", async (req, res) => {
+  console.log("hi");
   try {
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet("Marks");
+
     const batch = req.query.batch;
+    console.log(typeof batch);
     const database = client.db("project_work_dashboard");
     const collection = database.collection("student_mark_table");
     let data = await collection.find({}).toArray();
     data = data.filter((item) => item.batch === batch);
-    return res.status(200).send(data);
+    const keys = Object.keys(data[0]).filter((key) => key !== "_id");
+    worksheet.columns = keys.map((key) => ({
+      header: key.charAt(0).toUpperCase() + key.slice(1),
+      key: key,
+      width: 20,
+    }));
+
+    data.forEach((item) => {
+      worksheet.addRow(item);
+    });
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader("Content-Disposition", "attachment; filename=marks.xlsx");
+
+    await workbook.xlsx.write(res);
+    res.end();
   } catch (error) {
     console.error("Error retrieving data", error);
     res.status(500).send("Error retrieving data");

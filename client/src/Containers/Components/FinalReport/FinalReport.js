@@ -1,35 +1,62 @@
 import React from "react";
 import "./FinalReport.css";
 import StickyHeadTable from "../../Reusables/StickyHeadTable/StickyHeadTable";
-import { useGetBatchMark } from "../../../Query/Hooks/useGetBatchDetails";
-const columns = [
-  { id: "S.No", label: "S.No", minWidth: 170 },
-  { id: "Semester", label: "Semester", minWidth: 170 },
-  { id: "Batch", label: "Batch", minWidth: 170 },
-  { id: "Final Report", label: "Final Report", minWidth: 170 },
-  { id: "View Analysis", label: "View Analysis", minWidth: 170 },
-];
-
-const rows = [
-  {
-    "S.No": 1,
-    Semester: 7,
-    Batch: 2020 - 24,
-    "Final Report": "",
-    "View Analysis": "",
-  },
-  {
-    "S.No": 1,
-    Semester: 7,
-    Batch: 2020 - 24,
-    "Final Report": "",
-    "View Analysis": "",
-  },
-];
+import { useGetModeration } from "../../../Query/Hooks/useGetModeration";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const FinalReport = () => {
+  const { data, isPending, isError } = useGetModeration();
+  if (isPending) {
+    return (
+      <div className="loader">
+        <CircularProgress />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return <div>Error loading student data.</div>;
+  }
+
+  if (!data || !data.data || data.data.length === 0) {
+    return <div>No data available.</div>;
+  }
+
+  let columns = Object.keys(data.data[0])
+    .filter((key) => key !== "_id")
+    .map((key) => {
+      if (key === "semester" || key === "batch") {
+        return {
+          id: key,
+          label: key.charAt(0).toUpperCase() + key.slice(1),
+          minWidth: "fit-content",
+        };
+      }
+      return null;
+    })
+    .filter(Boolean);
+
+  columns.unshift({
+    id: "S.No",
+    label: "S.No",
+    minWidth: "fit-content",
+  });
+
+  let rows = data.data.map((item, index) => {
+    const { _id, ...rest } = item;
+    return {
+      "S.No": index + 1,
+      ...rest,
+    };
+  });
+
+  const downloadExcel = () => {
+    window.location.href = "http://localhost:3001/get-batch-marks?batch=2022";
+  };
+
   return (
     <div className="finalReportDetails">
+      <button onClick={downloadExcel}>Click</button>
       <StickyHeadTable columns={columns} rows={rows} minHeight={400} />
     </div>
   );
