@@ -48,15 +48,17 @@ export const FinalReport = () => {
     minWidth: "fit-content",
   });
 
-  let rows = data.data.map((item, index) => {
-    const { batch, semester } = item;
-    return {
-      "S.No": index + 1,
-      batch,
-      semester,
-      finalReport: `${batch}-${semester}.xlsx`,
-    };
-  });
+  let rows = data.data
+    .filter((item) => item.final_report_generated === "Yes")
+    .map((item, index) => {
+      const { batch, semester } = item;
+      return {
+        "S.No": index + 1,
+        batch,
+        semester,
+        finalReport: `${batch}-${semester}.xlsx`,
+      };
+    });
 
   return (
     <div className="finalReportDetails">

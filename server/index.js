@@ -92,7 +92,7 @@ app.post("/formEntry", async (req, res) => {
       excel_accepted: "Yes",
       no_of_moderation: moderationCount,
       status: moderationCount > 0 ? "Not completed" : "Completed",
-      final_report_generated: "No",
+      final_report_generated: moderationCount > 0 ? "No" : "Yes",
     },
   ];
   try {
@@ -138,7 +138,10 @@ app.post("/averageEntry", async (req, res) => {
       }
     }
     await moderationCollection
-      .updateMany({ batch: batchName }, { $set: { status: "Completed" } })
+      .updateMany(
+        { batch: batchName },
+        { $set: { status: "Completed", final_report_generated: "Yes" } }
+      )
       .catch((error) => console.log("1", error));
 
     return res.status(201).json({
