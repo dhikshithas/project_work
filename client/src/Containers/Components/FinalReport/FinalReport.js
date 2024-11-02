@@ -42,21 +42,24 @@ export const FinalReport = () => {
     minWidth: "fit-content",
   });
 
+  columns.push({
+    id: "finalReport",
+    label: "Final Report",
+    minWidth: "fit-content",
+  });
+
   let rows = data.data.map((item, index) => {
-    const { _id, ...rest } = item;
+    const { batch, semester } = item;
     return {
       "S.No": index + 1,
-      ...rest,
+      batch,
+      semester,
+      finalReport: `${batch}-${semester}.xlsx`,
     };
   });
 
-  const downloadExcel = () => {
-    window.location.href = "http://localhost:3001/get-batch-marks?batch=2022";
-  };
-
   return (
     <div className="finalReportDetails">
-      <button onClick={downloadExcel}>Click</button>
       <StickyHeadTable columns={columns} rows={rows} minHeight={400} />
     </div>
   );

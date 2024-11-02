@@ -27,6 +27,10 @@ export default function StickyHeadTable({ columns, rows, minHeight }) {
     navigate("/admin/moderationMark", { state: { batch: row.batch } });
   };
 
+  const downloadExcel = (batch) => {
+    window.location.href = `http://localhost:3001/get-batch-marks?batch=${batch}`;
+  };
+
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", maxHeight: "530px" }}>
       <TableContainer sx={{ minHeight: minHeight, maxHeight: 440 }}>
@@ -60,14 +64,25 @@ export default function StickyHeadTable({ columns, rows, minHeight }) {
                             column.id === "status" &&
                             row[column.id] === "Not completed"
                               ? () => handleStatusClick(row)
+                              : column.id == "finalReport"
+                              ? () => downloadExcel(row.batch)
                               : undefined
                           }
-                          style={
-                            column.id === "Status" &&
-                            row[column.id] === "Not completed"
-                              ? { cursor: "pointer" }
-                              : {}
-                          }
+                          style={{
+                            color:
+                              column.id === "status" &&
+                              value === "Not completed"
+                                ? "red"
+                                : column.id === "finalReport"
+                                ? "blue"
+                                : "inherit",
+                            cursor:
+                              (column.id === "status" &&
+                                value === "Not completed") ||
+                              column.id === "finalReport"
+                                ? "pointer"
+                                : "",
+                          }}
                         >
                           {column.format && typeof value === "number"
                             ? column.format(value)
