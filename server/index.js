@@ -1,4 +1,3 @@
-// Import the Express module
 const express = require("express");
 const { MongoClient } = require("mongodb");
 const cors = require("cors");
@@ -72,7 +71,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/formEntry", async (req, res) => {
-  const database = client.db("project_work_dashboard"); // Replace with your database name
+  const database = client.db("project_work_dashboard");
   const studentMarkCollection = database.collection("student_mark_table");
   const moderationCollection = database.collection("moderation_table");
   const studentData = req.body;
@@ -97,6 +96,42 @@ app.post("/formEntry", async (req, res) => {
       .insertMany(moderation)
       .then(() => console.log("success"))
       .catch((error) => console.log(error));
+    return res.status(201).json({
+      message: "Data inserted successfully",
+    });
+  } catch {
+    return res.status(500).json({ message: "Data is invalid" });
+  }
+});
+
+app.post("/averageEntry", async (req, res) => {
+  const database = client.db("project_work_dashboard");
+  const studentMarkCollection = database.collection("student_mark_table");
+  const moderationCollection = database.collection("moderation_table");
+  data = req.body;
+  batchName = data[0].batch;
+  try {
+    for (const item of data) {
+      const { roll_no, average, guide_total_mark } = item;
+      const existingDoc = await studentMarkCollection.findOne({
+        roll_no: roll_no,
+      });
+      if (!existingDoc) {
+        console.log(`No document found with _id: ${_id}`);
+      } else {
+        await studentMarkCollection
+          .updateOne(
+            { roll_no: roll_no },
+            { $set: { average: average, total: average + guide_total_mark } }
+          )
+          .then(() => console.log("done"))
+          .catch((error) => console.log("1", error.message));
+      }
+    }
+    await moderationCollection
+      .updateMany({ batch: batchName }, { $set: { status: "Completed" } })
+      .catch((error) => console.log("1", error));
+
     return res.status(201).json({
       message: "Data inserted successfully",
     });

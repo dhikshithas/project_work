@@ -55,7 +55,26 @@ export const FormEntry = () => {
         const total_pmc = obj3.pmc_total_mark * 0.1;
         const moderation = difference > total_pmc;
 
-        return { ...item1, ...matchingItem, ...obj3, moderation };
+        let average = null;
+        let total = null;
+
+        if (!moderation) {
+          average =
+            (parseFloat(matchingItem.PMC1_mark) +
+              parseFloat(matchingItem.PMC2_mark) +
+              parseFloat(matchingItem.PMC3_mark)) /
+            3;
+          total = average + obj3.guide_total_mark;
+        }
+
+        return {
+          ...item1,
+          ...matchingItem,
+          ...obj3,
+          moderation,
+          average,
+          total,
+        };
       }
 
       return item1;
